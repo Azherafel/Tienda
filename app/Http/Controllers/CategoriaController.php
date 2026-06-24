@@ -24,7 +24,7 @@ class CategoriaController extends Controller
      */
     public function create()
     {
-        //
+        return view('categoria.create');
     }
 
     /**
@@ -32,7 +32,8 @@ class CategoriaController extends Controller
      */
     public function store(StorecategoriaRequest $request)
     {
-        //
+        categoria::create(request()->all());
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -48,7 +49,9 @@ class CategoriaController extends Controller
      */
     public function edit(categoria $categoria)
     {
-        //
+        return view('categoria.edit', [
+            'categoria' => $categoria
+        ]);
     }
 
     /**
@@ -56,7 +59,9 @@ class CategoriaController extends Controller
      */
     public function update(UpdatecategoriaRequest $request, categoria $categoria)
     {
-        //
+        $categoria->update(request()->all());
+        session()->flash('success', 'Categoria actualizada correctamente');
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -64,6 +69,8 @@ class CategoriaController extends Controller
      */
     public function destroy(categoria $categoria)
     {
-        //
+        $categoria->delete();
+        session()->flash('success', 'Categoria eliminada correctamente');
+        return redirect()->route('categorias.index');
     }
 }

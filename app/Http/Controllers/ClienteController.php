@@ -79,6 +79,9 @@ class ClienteController extends Controller
      */
     public function destroy(cliente $cliente)
     {
-        //
+        //dd('Eliminando al cliente...' . $cliente->id);
+        $cliente->delete();
+        session()->flash('success', 'Cliente eliminado correctamente');
+        return redirect()->route('clientes.index');
     }
 }

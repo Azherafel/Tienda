@@ -48,7 +48,13 @@
                         <td>{{ $cliente->correo }}</td>
                         <td><a class="btn btn-primary"
                                 href="{{ route('clientes.edit', ['cliente' => $cliente->id]) }}">Actualizar</a></td>
-                        <td><a class="btn btn-danger" href="">Eliminar</a></td>
+                        <td>
+                            <form action="{{ route('clientes.destroy', ['cliente' => $cliente->id]) }}" method="POST">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

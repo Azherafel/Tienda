@@ -9,6 +9,9 @@
             <div class="mb-4 fs-5">
                 <label for="nombreCategoria" class="form-label">Nombre</label>
                 <input name="nombreCategoria" type="text" class="form-control" id="nombreCategoria" placeholder="Nombre de la categoria">
+                @error('nombreCategoria')
+                    <p class="text-danger small mt-1">{{ $message }}</p>
+                @enderror
             </div>
             <button type="submit" class="btn btn-primary">Crear</button>
         </form>

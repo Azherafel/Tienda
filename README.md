@@ -1,58 +1,196 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Tienda — Instalación en Windows
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Proyecto **Laravel 13** con frontend basado en **Vite**, **Tailwind CSS** y **Bootstrap**. Usa **SQLite** como base de datos por defecto, así que no necesitas instalar un servidor de base de datos aparte.
 
-## About Laravel
+## Requisitos previos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| Herramienta | Versión mínima | Verificar con (PowerShell/CMD) |
+|---|---|---|
+| PHP | 8.3+ | `php -v` |
+| Composer | 2.x | `composer -V` |
+| Node.js | 18+ (recomendado 20+) | `node -v` |
+| npm | 9+ | `npm -v` |
+| Git | cualquiera reciente | `git --version` |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Extensiones de PHP necesarias
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+`mbstring`, `openssl`, `pdo_sqlite`, `sqlite3`, `fileinfo`, `tokenizer`, `xml`, `ctype`, `curl`
+(En Windows estas extensiones se habilitan descomentando líneas en `php.ini`, ver más abajo).
 
-## Learning Laravel
+## Instalación de herramientas
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Opción recomendada: con [Laravel Herd](https://herd.laravel.com/windows)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Herd instala PHP, Composer y un servidor local con un solo instalador para Windows. Es la forma más rápida de tener todo listo. Después de instalarlo, sigue directo a "Pasos de instalación".
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Opción manual
 
-## Agentic Development
+1. **PHP**
+   - Descarga el build "Thread Safe" desde https://windows.php.net/download/
+   - Descomprime, por ejemplo, en `C:\php`
+   - Agrega `C:\php` a la variable de entorno `PATH` (Panel de control → Sistema → Configuración avanzada → Variables de entorno)
+   - Copia `php.ini-development` como `php.ini` y descomenta (quita el `;`) estas líneas:
+     ```
+     extension=mbstring
+     extension=openssl
+     extension=pdo_sqlite
+     extension=sqlite3
+     extension=fileinfo
+     extension=curl
+     ```
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+2. **Composer**
+   - Descarga e instala desde https://getcomposer.org/Composer-Setup.exe
+   - El instalador detecta tu PHP automáticamente
 
-```bash
-composer require laravel/boost --dev
+3. **Node.js**
+   - Descarga el instalador LTS desde https://nodejs.org/ (incluye npm)
 
-php artisan boost:install
+4. **Git**
+   - Descarga desde https://git-scm.com/download/win
+
+> Tip: usa **PowerShell** o la terminal integrada de VS Code para todos los comandos siguientes.
+
+## Pasos de instalación
+
+```powershell
+# 1. Clonar el repositorio
+git clone https://github.com/Azherafel/Tienda.git
+cd Tienda
+
+# 2. Instalar dependencias de PHP
+composer install
+
+# 3. Crear archivo de entorno y generar clave de la app
+copy .env.example .env
+php artisan key:generate
+
+# 4. Crear la base de datos SQLite (vacía)
+New-Item database\database.sqlite -ItemType File
+php artisan migrate
+
+# (Opcional) Cargar datos de prueba si el proyecto tiene seeders
+php artisan db:seed
+
+# 5. Instalar dependencias de frontend
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+> Si usas CMD en vez de PowerShell, cambia `copy` y `New-Item` por:
+> ```cmd
+> copy .env.example .env
+> type nul > database\database.sqlite
+> ```
 
-## Contributing
+## Levantar el proyecto
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Opción A — todo en un solo comando** (servidor, queue, logs y Vite juntos):
 
-## Code of Conduct
+```powershell
+composer run dev
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Opción B — manual, en dos terminales separadas:**
 
-## Security Vulnerabilities
+```powershell
+php artisan serve      # backend → http://localhost:8000
+npm run dev            # Vite (assets en caliente)
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Abre tu navegador en **http://localhost:8000**.
 
-## License
+## Problemas comunes
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **`'php' no se reconoce como un comando`:** falta agregar PHP al `PATH`, o necesitas abrir una terminal nueva después de instalarlo.
+- **`could not find driver` al migrar:** revisa que `extension=pdo_sqlite` y `extension=sqlite3` estén descomentadas en tu `php.ini`, y que ese sea el `php.ini` que tu PHP realmente está usando (`php --ini` te dice cuál carga).
+- **Error de permisos/antivirus al instalar dependencias npm:** ejecuta la terminal como administrador o agrega una excepción temporal en el antivirus.
+- **Puerto 8000 ocupado:** usa `php artisan serve --port=8001`.
+
+- # Tienda — Instalación en Linux
+
+Proyecto **Laravel 13** con frontend basado en **Vite**, **Tailwind CSS** y **Bootstrap**. Usa **SQLite** como base de datos por defecto, así que no necesitas instalar un servidor de base de datos aparte.
+
+## Requisitos previos
+
+| Herramienta | Versión mínima | Verificar con |
+|---|---|---|
+| PHP | 8.3+ | `php -v` |
+| Composer | 2.x | `composer -V` |
+| Node.js | 18+ (recomendado 20+) | `node -v` |
+| npm | 9+ | `npm -v` |
+| Git | cualquiera reciente | `git --version` |
+
+### Extensiones de PHP necesarias
+
+`mbstring`, `openssl`, `pdo`, `pdo_sqlite`, `sqlite3`, `fileinfo`, `tokenizer`, `xml`, `ctype`, `curl`
+
+### Instalar lo anterior (ejemplo en Ubuntu/Debian/Mint)
+
+```bash
+sudo apt update
+sudo apt install php8.3 php8.3-cli php8.3-mbstring php8.3-xml php8.3-curl \
+  php8.3-sqlite3 php8.3-tokenizer unzip curl git -y
+
+# Composer
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+
+# Node.js (vía NodeSource, ejemplo Node 20)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+> En Arch: `sudo pacman -S php composer nodejs npm git`
+> En Fedora: `sudo dnf install php php-cli php-pdo php-sqlite3 composer nodejs npm git`
+
+## Pasos de instalación
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/Azherafel/Tienda.git
+cd Tienda
+
+# 2. Instalar dependencias de PHP
+composer install
+
+# 3. Crear archivo de entorno y generar clave de la app
+cp .env.example .env
+php artisan key:generate
+
+# 4. Crear la base de datos SQLite
+touch database/database.sqlite
+php artisan migrate
+
+# (Opcional) Cargar datos de prueba si el proyecto tiene seeders
+php artisan db:seed
+
+# 5. Instalar dependencias de frontend
+npm install
+```
+
+## Levantar el proyecto
+
+**Opción A — todo en un solo comando** (servidor, queue, logs y Vite juntos):
+
+```bash
+composer run dev
+```
+
+**Opción B — manual, en terminales separadas:**
+
+```bash
+php artisan serve      # backend → http://localhost:8000
+npm run dev            # Vite (assets en caliente)
+```
+
+Abre tu navegador en **http://localhost:8000**.
+
+## Problemas comunes
+
+- **`Permission denied` en `storage/` o `bootstrap/cache/`:**
+  ```bash
+  sudo chmod -R 775 storage bootstrap/cache
+  sudo chown -R $USER:$USER storage bootstrap/cache
+  ```
+- **`could not find driver` al migrar:** falta la extensión `php-sqlite3`/`pdo_sqlite`. Instálala y reinicia el comando.
+- **Puerto 8000 ocupado:** usa `php artisan serve --port=8001`.

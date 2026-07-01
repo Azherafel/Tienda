@@ -1,16 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Clientes')
 @section('content')
-
-@section('alert')
-
-@if (session('success'))
-    <div class="alert alert-success" role="alert">
-        {{ session('success') }}
-    </div>
-@endif
     
-@endsection
 
 <div class="row">
     <div class="col-10">
@@ -18,6 +9,36 @@
         <h1>Clientes</h1>
     </div>
 
+    @push('scripts')
+    <script type="module">
+        $(document).ready(function(){
+            $(".form-delete").submit(function(e){
+                e.preventDefault();
+                const form = this;
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Esta acción no se puede deshacer.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "¡Eliminado!",
+                            text: "El cliente ha sido eliminado exitosamente.",
+                            icon: "success"
+                        }).then(() => {
+                            form.submit();
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    @endpush
     <div class="col-2">
         <br><br><a class="btn btn-success" href="{{ route('clientes.create') }}">Nuevo cliente</a>
     </div>
@@ -49,7 +70,7 @@
                         <td><a class="btn btn-primary"
                                 href="{{ route('clientes.edit', ['cliente' => $cliente->id]) }}">Actualizar</a></td>
                         <td>
-                            <form action="{{ route('clientes.destroy', ['cliente' => $cliente->id]) }}" method="POST">
+                            <form action="{{ route('clientes.destroy', ['cliente' => $cliente->id]) }}" method="POST" class="form-delete">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -61,4 +82,6 @@
         </table>
     </div>
 </div>
+
+
 @endsection

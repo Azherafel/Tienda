@@ -9,6 +9,9 @@
     {{-- Bootstrap CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    {{-- Vite (jQuery + SweetAlert2 + SASS) --}}
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
 </head>
 
 <body>
@@ -86,6 +89,8 @@
 
     {{-- Bootstrap JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    @stack('scripts')
 </body>
 
 </html>

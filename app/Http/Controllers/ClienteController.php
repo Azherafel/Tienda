@@ -41,6 +41,7 @@ class ClienteController extends Controller
     {
         //dd('Cliente por ser registrado');
         $cliente = Cliente::create(request()->all());
+        session()->flash('success', 'Cliente añadido exitosamente');
         return redirect()->route('clientes.index');
     }
 
@@ -69,7 +70,7 @@ class ClienteController extends Controller
     public function update(UpdateclienteRequest $request, cliente $cliente)
     {
         $cliente->update(request()->all());
-        session()->flash('success', 'Cliente actualizado correctamente');
+        session()->flash('success', 'Cliente actualizado exitosamente');
         return redirect()->route('clientes.index');
         //dd('Actualizando al cliente');
     }
@@ -81,7 +82,6 @@ class ClienteController extends Controller
     {
         //dd('Eliminando al cliente...' . $cliente->id);
         $cliente->delete();
-        session()->flash('success', 'Cliente eliminado correctamente');
         return redirect()->route('clientes.index');
     }
 }

@@ -9,6 +9,20 @@
         <h1>Clientes</h1>
     </div>
 
+    @if (session('success'))
+    @push('scripts')
+    <script type="module">
+        $(document).ready(function(){
+            Swal.fire({
+                icon: "success",
+                title: "¡Listo!",
+                text: "{{ session('success') }}"
+            });
+        });
+    </script>
+    @endpush
+    @endif
+
     @push('scripts')
     <script type="module">
         $(document).ready(function(){

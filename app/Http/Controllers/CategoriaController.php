@@ -33,6 +33,7 @@ class CategoriaController extends Controller
     public function store(StorecategoriaRequest $request)
     {
         categoria::create(request()->all());
+        session()->flash('success', 'Categoria añadida exitosamente');
         return redirect()->route('categorias.index');
     }
 

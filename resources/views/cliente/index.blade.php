@@ -84,11 +84,42 @@
                         <td><a class="btn btn-primary"
                                 href="{{ route('clientes.edit', ['cliente' => $cliente->id]) }}">Actualizar</a></td>
                         <td>
-                            <form action="{{ route('clientes.destroy', ['cliente' => $cliente->id]) }}" method="POST" class="form-delete">
+                            <form id="frm-delete-{{ $cliente->id }}" action="{{ route('clientes.destroy', ['cliente' => $cliente->id]) }}" method="POST" class="form-delete">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
                             </form>
+                            <script type="module">
+                                        $("#frm-delete-{{ $cliente->id }}").submit(function(e) {
+                                            //alert('SUBMIT OK');
+                                            e.preventDefault();
+
+                                            //////////////////////////////auth
+                                            Swal.fire({
+                                                title: "Estas seguro?",
+                                                text: "No se podra revertir!",
+                                                icon: "warning",
+                                                showCancelButton: true,
+                                                confirmButtonColor: "#3085d6",
+                                                cancelButtonColor: "#d33",
+                                                confirmButtonText: "Si, borrar!"
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    /*
+                                                    Swal.fire({
+                                                    title: "Deleted!",
+                                                    text: "Your file has been deleted.",
+                                                    icon: "success"
+                                                    });
+                                                    */
+                                                    this.submit();
+                                                }
+                                            });
+
+                                            /////////////////////////////auth
+
+                                        }); //fin SUBMIT
+                                    </script>
                         </td>
                     </tr>
                 @endforeach

@@ -2,22 +2,50 @@
 @section('title', 'Categorias')
 @section('content')
 
-@section('alert')
-
-@if (session('success'))
-    <div class="alert alert-success" role="alert">
-        {{ session('success') }}
-    </div>
-@endif
-
-@endsection
-
 <div class="row">
     <div class="col-10">
         <br>
         <h1>Categorias</h1>
     </div>
 
+    @if (session('success'))
+    @push('scripts')
+    <script type="module">
+        $(document).ready(function(){
+            Swal.fire({
+                icon: "success",
+                title: "¡Listo!",
+                text: "{{ session('success') }}"
+            });
+        });
+    </script>
+    @endpush
+    @endif
+
+    @push('scripts')
+    <script type="module">
+        $(document).ready(function(){
+            $(".form-delete").submit(function(e){
+                e.preventDefault();
+                const form = this;
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Esta acción no se puede deshacer.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+    @endpush
     <div class="col-2">
         <br><br><a class="btn btn-success" href="{{ route('categorias.create') }}">Nueva categoria</a>
     </div>
@@ -41,7 +69,7 @@
                         <td><a class="btn btn-primary"
                                 href="{{ route('categorias.edit', ['categoria' => $categoria->id]) }}">Actualizar</a></td>
                         <td>
-                            <form action="{{ route('categorias.destroy', ['categoria' => $categoria->id]) }}" method="POST">
+                            <form action="{{ route('categorias.destroy', ['categoria' => $categoria->id]) }}" method="POST" class="form-delete">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-danger">Eliminar</button>

@@ -13,15 +13,10 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes = cliente::all();
+        $clientes = cliente::paginate(10);
         return view('cliente.index',[
             'clientes' => $clientes
         ]);
-        //dd($clientes);
-       // dd('Controller Cliente Index');
-    return view('cliente.index',[
-        'clientes' => $clientes
-    ]);
     }
 
     /**

@@ -13,7 +13,7 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        $categorias = categoria::all();
+        $categorias = categoria::paginate(10);
         return view('categoria.index',[
             'categorias' => $categorias
         ]);

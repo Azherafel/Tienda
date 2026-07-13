@@ -79,6 +79,7 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $categorias->links() }}
     </div>
 </div>
 @endsection

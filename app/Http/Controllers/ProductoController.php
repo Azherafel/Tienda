@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductoRequest;
 use App\Http\Requests\UpdateProductoRequest;
+use App\Models\categoria;
 use App\Models\Producto;
 
 class ProductoController extends Controller
@@ -13,7 +14,10 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        //
+        $productos = Producto::with('categoria')->paginate(10);
+        return view('producto.index', [
+            'productos' => $productos
+        ]);
     }
 
     /**
@@ -21,7 +25,10 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        //
+        $categorias = categoria::all();
+        return view('producto.create', [
+            'categorias' => $categorias
+        ]);
     }
 
     /**
@@ -29,7 +36,11 @@ class ProductoController extends Controller
      */
     public function store(StoreProductoRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['estado'] = $request->boolean('estado');
+        Producto::create($data);
+        session()->flash('success', 'Producto añadido exitosamente');
+        return redirect()->route('productos.index');
     }
 
     /**
@@ -45,7 +56,11 @@ class ProductoController extends Controller
      */
     public function edit(Producto $producto)
     {
-        //
+        $categorias = categoria::all();
+        return view('producto.edit', [
+            'producto' => $producto,
+            'categorias' => $categorias
+        ]);
     }
 
     /**
@@ -53,7 +68,11 @@ class ProductoController extends Controller
      */
     public function update(UpdateProductoRequest $request, Producto $producto)
     {
-        //
+        $data = $request->validated();
+        $data['estado'] = $request->boolean('estado');
+        $producto->update($data);
+        session()->flash('success', 'Producto actualizado exitosamente');
+        return redirect()->route('productos.index');
     }
 
     /**
@@ -61,6 +80,8 @@ class ProductoController extends Controller
      */
     public function destroy(Producto $producto)
     {
-        //
+        $producto->delete();
+        session()->flash('success', 'Producto eliminado correctamente');
+        return redirect()->route('productos.index');
     }
 }

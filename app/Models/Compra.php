@@ -36,4 +36,11 @@ class Compra extends Model
             ->withPivot(['cantidad', 'precioUnitario', 'subtotal'])
             ->withTimestamps();
     }
+
+    protected function casts(): array
+    {
+        return [
+            'total' => 'decimal:2',
+        ];
+    }
 }

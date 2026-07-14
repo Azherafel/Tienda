@@ -5,3 +5,4 @@ import jQuery from 'jquery';
 
 window.Swal = Swal;
 window.$ = jQuery;
+window.bootstrap = bootstrap;

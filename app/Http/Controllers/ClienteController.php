@@ -36,6 +36,11 @@ class ClienteController extends Controller
     {
         //dd('Cliente por ser registrado');
         $cliente = Cliente::create(request()->all());
+
+        if ($request->wantsJson()) {
+            return response()->json(['cliente' => $cliente], 201);
+        }
+
         session()->flash('success', 'Cliente añadido exitosamente');
         return redirect()->route('clientes.index');
     }

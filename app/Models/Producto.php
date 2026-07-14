@@ -31,4 +31,13 @@ class Producto extends Model
     {
         return $this->hasMany(CompraProducto::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'precio' => 'decimal:2',
+            'stock' => 'integer',
+            'estado' => 'boolean',
+        ];
+    }
 }
